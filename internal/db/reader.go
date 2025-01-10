@@ -1,9 +1,14 @@
 package db
 
-import "github.com/dgraph-io/badger/v4"
+import (
+	"time"
 
-func ReadData(db *badger.DB, key string) (string, error) {
+	"github.com/dgraph-io/badger/v4"
+)
+
+func ReadData(db *badger.DB, key string) (string, time.Duration, error) {
 	var value string
+	start := time.Now()
 	err := db.View(func(txn *badger.Txn) error {
 		item, err := txn.Get([]byte(key))
 		if err != nil {
@@ -14,5 +19,6 @@ func ReadData(db *badger.DB, key string) (string, error) {
 			return nil
 		})
 	})
-	return value, err
+	duration := time.Since(start)
+	return value, duration, err
 }

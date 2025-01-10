@@ -1,9 +1,16 @@
 package db
 
-import badger "github.com/dgraph-io/badger/v4"
+import (
+	"time"
 
-func DeleteData(db *badger.DB, key string) error {
-	return db.Update(func(txn *badger.Txn) error {
+	badger "github.com/dgraph-io/badger/v4"
+)
+
+func DeleteData(db *badger.DB, key string) (time.Duration, error) {
+	start := time.Now()
+	err := db.Update(func(txn *badger.Txn) error {
 		return txn.Delete([]byte(key))
 	})
+	duration := time.Since(start)
+	return duration, err
 }

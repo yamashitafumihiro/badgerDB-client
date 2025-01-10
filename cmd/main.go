@@ -47,10 +47,12 @@ func main() {
 			}
 			key := args[1]
 			value := args[2]
-			if err := db.WriteData(database, key, value); err != nil {
+			writeDuration, err := db.WriteData(database, key, value)
+			if err != nil {
 				log.Printf("failed to write data: %v", err)
 			} else {
 				fmt.Printf("Successfully wrote key: %s, value: %s\n", key, value)
+				fmt.Printf("Write duration: %v\n", writeDuration)
 			}
 
 		case "get":
@@ -59,11 +61,12 @@ func main() {
 				continue
 			}
 			key := args[1]
-			value, err := db.ReadData(database, key)
+			value, readDuration, err := db.ReadData(database, key)
 			if err != nil {
 				log.Printf("failed to read data: %v", err)
 			} else {
 				fmt.Printf("Key: %s, Value: %s\n", key, value)
+				fmt.Printf("Read duration: %v\n", readDuration)
 			}
 
 		case "delete":
@@ -72,10 +75,12 @@ func main() {
 				continue
 			}
 			key := args[1]
-			if err := db.DeleteData(database, key); err != nil {
+			deleteDuration, err := db.DeleteData(database, key)
+			if err != nil {
 				log.Printf("failed to delete data: %v", err)
 			} else {
 				fmt.Printf("Successfully deleted key: %s\n", key)
+				fmt.Printf("Delete duration: %v\n", deleteDuration)
 			}
 
 		case "help":
